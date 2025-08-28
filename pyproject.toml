@@ -1,0 +1,15 @@
+[project]
+name = "littlelemon-capstone"
+version = "0.1.0"
+description = "Little Lemon Capstone Project"
+requires-python = ">=3.13"
+dependencies = [
+    "django",
+    "djangorestframework",
+    "djoser",
+    "django-filter",
+    "drf-spectacular[sidecar]",
+]
+
+[tool.uv]
+dev-dependencies = []

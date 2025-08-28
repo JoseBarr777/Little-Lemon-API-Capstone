@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'djoser',
     'LittleLemonAPI',
     'django_filters',
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
 ]
 
 MIDDLEWARE = [
@@ -129,7 +131,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-        "rest_framework.authentication.SessionAuthentication",
+        # "rest_framework.authentication.SessionAuthentication",
     ),
     # Require auth everywhere by default
     "DEFAULT_PERMISSION_CLASSES": [
@@ -152,6 +154,9 @@ REST_FRAMEWORK = {
         "rest_framework.filters.SearchFilter",
         "rest_framework.filters.OrderingFilter",
     ],
+        
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+
 }
 
 DJOSER = {
@@ -161,4 +166,32 @@ DJOSER = {
         "token_create": ["rest_framework.permissions.AllowAny"],  # /auth/token/login/
         "token_destroy": ["rest_framework.permissions.IsAuthenticated"],
     }
+}
+
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "LittleLemon API",
+    "DESCRIPTION": "Menu & Category endpoints with role-based permissions.",
+    "VERSION": "1.0.0",
+    # Document Token auth so the Swagger "Authorize" works
+    "AUTHENTICATION_WHITELIST": [],  # (optional) keep empty
+    "SERVE_INCLUDE_SCHEMA": False,   # we’ll mount schema at /schema/
+    "COMPONENT_SPLIT_REQUEST": True,
+    "SECURITY": [{"TokenAuth": []}],  # default for all ops unless overridden
+    "CONTACT": {"name": "LittleLemon", "email": "support@example.com"},
+    "LICENSE": {"name": "MIT"},
+    "SERVERS": [{"url": "http://localhost:8000"}],
+    "POSTPROCESSING_HOOKS": [],
+    "SWAGGER_UI_SETTINGS": {"persistAuthorization": True},
+    "REDOC_UI_SETTINGS": {},
+    "APPEND_COMPONENTS": {
+        "securitySchemes": {
+            "TokenAuth": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "Authorization",
+                "description": "Format: `Token <your_token>`",
+            }
+        }
+    },
 }
